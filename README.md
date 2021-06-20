@@ -3,7 +3,7 @@
 Create a private blockchain to track all star information submitted by users. When posting users need to sign request so ownership can be tracked. specifically get requestValidation (b.) and sign and addStar (c.)
 
 
-Install and Run<br/><br/>
+Install and Run<br/>
 npm install<br/>
 npm start
 
@@ -18,7 +18,7 @@ e.g Pass json in body<br/>
 {"address":"bc1qv65hjy7aagu3skrynesvwv30h5s2hhngw7tsxp"}<br/>
 Response<br/>
 {"bc1qv65hjy7aagu3skrynesvwv30h5s2hhngw7tsxp:1624208835:starRegistry"}<br/>
-Format <address>:<timestamp>:starRegistry
+Format [address]:[timestamp]:starRegistry
 
 The response above needs to be signed and passed in c using bitcoin core or electrum wallet
 
