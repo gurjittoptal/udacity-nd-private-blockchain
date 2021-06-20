@@ -3,7 +3,7 @@
 Create a private blockchain to track all star information submitted by users. When posting users need to sign request so ownership can be tracked. specifically get requestValidation (b.) and sign and addStar (c.)
 
 
-Install and Run
+Install and Run<br/><br/>
 npm install
 npm start
 
