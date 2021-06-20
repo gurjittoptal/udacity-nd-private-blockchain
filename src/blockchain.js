@@ -75,7 +75,7 @@ class Blockchain {
             block.hash = await SHA256(JSON.stringify(block)).toString();
 
             if ( block.time && block.hash ) {
-                let _validated = this.validateChain();
+                let _validated = await this.validateChain();
                 if ( _validated.length>0 ) reject(new Error('invalid chain.'));
                 this.height = block.height + 1;
                 this.chain.push(block);
