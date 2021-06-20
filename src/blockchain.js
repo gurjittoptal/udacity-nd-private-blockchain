@@ -75,6 +75,8 @@ class Blockchain {
             block.hash = await SHA256(JSON.stringify(block)).toString();
 
             if ( block.time && block.hash ) {
+                let _validated = this.validateChain();
+                if ( _validated.length>0 ) reject(new Error('invalid chain.'));
                 this.height = block.height + 1;
                 this.chain.push(block);
                 resolve(block);
@@ -127,8 +129,8 @@ class Blockchain {
             // reject on error
             if ((_ct - _reqt) >= (5 * 60)) reject(new Error('Stale Request.'));
             // add block to chain & resolve
-            let block = new BlockClass.Block({ star });
-            block.owner = address;
+            let block = new BlockClass.Block({ owner: address,star });
+            block.by = Buffer.from(address).toString('hex')
             block = self._addBlock(block)
             resolve(block);
         });
@@ -144,7 +146,7 @@ class Blockchain {
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-            resolve(self.chain.filter(block => block.hash === hash)[0]);
+            resolve(self.chain.find(block => block.hash === hash));
         });
     }
 
@@ -156,7 +158,7 @@ class Blockchain {
     getBlockByHeight(height) {
         let self = this;
         return new Promise((resolve, reject) => {
-            let block = self.chain.filter(p => p.height === height)[0];
+            let block = self.chain.find(p => p.height === height);
             if(block){
                 resolve(block);
             } else {
@@ -174,11 +176,11 @@ class Blockchain {
     getStarsByWalletAddress (address) {
         let self = this;
         let stars = [];
-        
+
         return new Promise((resolve, reject) => {
-            let _addOwned = self.chain.filter(block => block.owner === address);
+            let _addOwned = self.chain.filter(block => block.by === Buffer.from(address).toString('hex'));
             if (_addOwned.length === 0) resolve(stars);
-            stars = _addOwned.map(block => JSON.parse(hex2ascii(block.body)));
+            stars = _addOwned.map(block => block.getBData());
             stars ? resolve(stars) : reject(new Error('Invalid Star Info.'));
         });
     }
@@ -206,7 +208,7 @@ class Blockchain {
                 }
 
             }
-            errorLog.length > 0 ? resolve(errorLog) : resolve('All good.');
+            errorLog.length > 0 ? resolve(errorLog) : resolve([]);
 
         });
     }

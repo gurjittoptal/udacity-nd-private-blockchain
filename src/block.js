@@ -61,16 +61,7 @@ class Block {
     getBData() {
         let self = this;
 
-        // Getting the encoded data saved in the Block
-        // Decoding the data to retrieve the JSON representation of the object
-        // Parse the data to an object to be retrieve.
-
-        // Resolve with the data if the object isn't the Genesis block
-        return new Promise((resolve, reject) => {
-            const _retObj = Json.parse( hex2ascii(self.body) );
-            if (this.height<1) reject(new Error('genesis'));
-            resolve(_retObj);
-        });
+        return JSON.parse( hex2ascii(self.body) );
 
     }
 
